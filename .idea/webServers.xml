@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="cac23159-496d-4c1c-aef4-88d10baf5231" name="gnn">
+        <fileTransfer accessType="SFTP" host="10.60.103.246" port="21222" sshConfigId="e841e16b-237e-4e92-8e22-b25a6a420ca5" sshConfig="dizaiyuan@10.60.103.246:21222 agent" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

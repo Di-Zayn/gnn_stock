@@ -1,0 +1,6 @@
+saved_models/
+dataset/
+result/
+!nn_data_generator.py
+analyse/*.csv
+temp_seed/

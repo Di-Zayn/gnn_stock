@@ -1,0 +1,211 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                label_2   R-squared:                       0.433
+Model:                            OLS   Adj. R-squared:                  0.433
+Method:                 Least Squares   F-statistic:                     2790.
+Date:                Thu, 06 Oct 2022   Prob (F-statistic):               0.00
+Time:                        12:34:56   Log-Likelihood:                -62253.
+No. Observations:               54834   AIC:                         1.245e+05
+Df Residuals:                   54818   BIC:                         1.247e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const      -3.767e-18      0.003  -1.17e-15      1.000      -0.006       0.006
+close         14.2172      0.680     20.901      0.000      12.884      15.550
+open          -2.1174      0.561     -3.773      0.000      -3.217      -1.017
+high         -13.9117      0.408    -34.059      0.000     -14.712     -13.111
+low            9.6006      0.393     24.438      0.000       8.831      10.371
+change        -0.2573      0.012    -22.004      0.000      -0.280      -0.234
+pct_chg        0.3163      0.005     61.774      0.000       0.306       0.326
+vol            0.0343      0.012      2.830      0.005       0.011       0.058
+amount        -0.0165      0.012     -1.368      0.171      -0.040       0.007
+dif            0.2493      0.014     17.641      0.000       0.222       0.277
+dea            0.0931      0.007     14.063      0.000       0.080       0.106
+macd           0.5118      0.026     19.651      0.000       0.461       0.563
+MA5          -27.6558      0.568    -48.666      0.000     -28.770     -26.542
+MA10           8.8236      0.334     26.396      0.000       8.168       9.479
+MA20          11.0089      0.717     15.363      0.000       9.604      12.413
+k              0.0871      0.002     54.963      0.000       0.084       0.090
+d             -0.1008      0.005    -20.026      0.000      -0.111      -0.091
+j              0.2792      0.005     51.454      0.000       0.269       0.290
+==============================================================================
+Omnibus:                     6819.649   Durbin-Watson:                   1.609
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            24020.042
+Skew:                          -0.616   Prob(JB):                         0.00
+Kurtosis:                       5.999   Cond. No.                     1.18e+16
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 2.75e-27. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                label_2   R-squared:                       0.250
+Model:                            OLS   Adj. R-squared:                  0.250
+Method:                 Least Squares   F-statistic:                     1220.
+Date:                Thu, 06 Oct 2022   Prob (F-statistic):               0.00
+Time:                        12:34:57   Log-Likelihood:                -69909.
+No. Observations:               54834   AIC:                         1.398e+05
+Df Residuals:                   54818   BIC:                         1.400e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const      -3.767e-18      0.004  -1.02e-15      1.000      -0.007       0.007
+close          7.3798      0.781      9.447      0.000       5.849       8.911
+open           3.4882      0.641      5.444      0.000       2.232       4.744
+high         -15.1853      0.470    -32.304      0.000     -16.107     -14.264
+low            9.5349      0.451     21.145      0.000       8.651      10.419
+change        -0.1230      0.013     -9.145      0.000      -0.149      -0.097
+pct_chg        0.2985      0.006     50.604      0.000       0.287       0.310
+vol            0.0242      0.014      1.739      0.082      -0.003       0.052
+amount        -0.0074      0.014     -0.537      0.591      -0.035       0.020
+dif            0.1992      0.016     12.301      0.000       0.167       0.231
+dea            0.0630      0.007      8.404      0.000       0.048       0.078
+macd           0.4392      0.030     14.675      0.000       0.381       0.498
+MA5          -22.4980      0.652    -34.523      0.000     -23.775     -21.221
+MA10           8.1990      0.380     21.575      0.000       7.454       8.944
+MA20           9.0432      0.816     11.078      0.000       7.443      10.643
+k              0.0415      0.002     22.804      0.000       0.038       0.045
+d             -0.0635      0.006    -10.968      0.000      -0.075      -0.052
+j              0.1500      0.006     24.053      0.000       0.138       0.162
+==============================================================================
+Omnibus:                     7545.772   Durbin-Watson:                   1.046
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            23890.104
+Skew:                          -0.714   Prob(JB):                         0.00
+Kurtosis:                       5.901   Cond. No.                     9.03e+15
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 4.72e-27. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                label_2   R-squared:                       0.114
+Model:                            OLS   Adj. R-squared:                  0.114
+Method:                 Least Squares   F-statistic:                     472.1
+Date:                Thu, 06 Oct 2022   Prob (F-statistic):               0.00
+Time:                        12:34:57   Log-Likelihood:                -74475.
+No. Observations:               54834   AIC:                         1.490e+05
+Df Residuals:                   54818   BIC:                         1.491e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const      -3.767e-18      0.004  -9.37e-16      1.000      -0.008       0.008
+close          0.5361      0.846      0.634      0.526      -1.122       2.194
+open           4.7036      0.690      6.813      0.000       3.350       6.057
+high         -12.1504      0.510    -23.819      0.000     -13.150     -11.151
+low            8.7357      0.490     17.829      0.000       7.775       9.696
+change         0.0236      0.015      1.628      0.104      -0.005       0.052
+pct_chg        0.2123      0.006     33.175      0.000       0.200       0.225
+vol            0.0350      0.015      2.309      0.021       0.005       0.065
+amount        -0.0126      0.015     -0.839      0.401      -0.042       0.017
+dif            0.1010      0.018      5.755      0.000       0.067       0.135
+dea            0.0160      0.008      1.998      0.046       0.000       0.032
+macd           0.2670      0.032      8.220      0.000       0.203       0.331
+MA5          -11.2959      0.707    -15.985      0.000     -12.681      -9.911
+MA10           4.3819      0.409     10.703      0.000       3.579       5.184
+MA20           5.0476      0.879      5.740      0.000       3.324       6.771
+k              0.0096      0.002      4.851      0.000       0.006       0.013
+d             -0.0340      0.006     -5.406      0.000      -0.046      -0.022
+j              0.0561      0.007      8.299      0.000       0.043       0.069
+==============================================================================
+Omnibus:                     9778.271   Durbin-Watson:                   0.819
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            29574.589
+Skew:                          -0.931   Prob(JB):                         0.00
+Kurtosis:                       6.079   Cond. No.                     1.15e+16
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 2.92e-27. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                label_2   R-squared:                       0.063
+Model:                            OLS   Adj. R-squared:                  0.063
+Method:                 Least Squares   F-statistic:                     246.8
+Date:                Thu, 06 Oct 2022   Prob (F-statistic):               0.00
+Time:                        12:34:57   Log-Likelihood:                -76014.
+No. Observations:               54834   AIC:                         1.521e+05
+Df Residuals:                   54818   BIC:                         1.522e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const      -3.767e-18      0.004  -9.11e-16      1.000      -0.008       0.008
+close         -7.5792      0.862     -8.792      0.000      -9.269      -5.889
+open           1.9977      0.684      2.920      0.004       0.657       3.339
+high          -9.8454      0.523    -18.830      0.000     -10.870      -8.821
+low            7.6981      0.502     15.327      0.000       6.714       8.683
+change         0.1431      0.015      9.783      0.000       0.114       0.172
+pct_chg        0.1515      0.007     22.934      0.000       0.139       0.164
+vol            0.0536      0.016      3.439      0.001       0.023       0.084
+amount        -0.0260      0.016     -1.675      0.094      -0.056       0.004
+dif            0.2107      0.018     11.687      0.000       0.175       0.246
+dea            0.0594      0.008      7.279      0.000       0.043       0.075
+macd           0.4785      0.033     14.317      0.000       0.413       0.544
+MA5           -5.0794      0.726     -6.997      0.000      -6.502      -3.657
+MA10           1.4399      0.418      3.445      0.001       0.621       2.259
+MA20          11.3286      0.899     12.604      0.000       9.567      13.090
+k             -0.0092      0.002     -4.545      0.000      -0.013      -0.005
+d              0.0001      0.006      0.016      0.987      -0.013       0.013
+j             -0.0178      0.007     -2.553      0.011      -0.031      -0.004
+==============================================================================
+Omnibus:                    11900.691   Durbin-Watson:                   0.653
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            40707.937
+Skew:                          -1.083   Prob(JB):                         0.00
+Kurtosis:                       6.623   Cond. No.                     1.27e+16
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 2.39e-27. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                label_2   R-squared:                       0.024
+Model:                            OLS   Adj. R-squared:                  0.024
+Method:                 Least Squares   F-statistic:                     90.80
+Date:                Thu, 06 Oct 2022   Prob (F-statistic):          8.49e-278
+Time:                        12:34:57   Log-Likelihood:                -77133.
+No. Observations:               54834   AIC:                         1.543e+05
+Df Residuals:                   54818   BIC:                         1.544e+05
+Df Model:                          15                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const      -3.767e-18      0.004  -8.93e-16      1.000      -0.008       0.008
+close         -4.8578      0.873     -5.567      0.000      -6.568      -3.148
+open           0.1255      0.695      0.181      0.857      -1.236       1.487
+high          -7.4498      0.535    -13.930      0.000      -8.498      -6.402
+low            5.4532      0.515     10.596      0.000       4.444       6.462
+change         0.0553      0.015      3.759      0.000       0.026       0.084
+pct_chg       -0.0344      0.007     -5.112      0.000      -0.048      -0.021
+vol            0.0735      0.016      4.614      0.000       0.042       0.105
+amount        -0.0394      0.016     -2.489      0.013      -0.071      -0.008
+dif            0.2318      0.018     12.652      0.000       0.196       0.268
+dea            0.0630      0.008      7.660      0.000       0.047       0.079
+macd           0.5299      0.034     15.593      0.000       0.463       0.596
+MA5           -8.0761      0.736    -10.971      0.000      -9.519      -6.633
+MA10           2.5424      0.426      5.966      0.000       1.707       3.378
+MA20          12.2243      0.909     13.455      0.000      10.444      14.005
+k             -0.0108      0.002     -5.242      0.000      -0.015      -0.007
+d              0.0052      0.007      0.794      0.427      -0.008       0.018
+j             -0.0266      0.007     -3.752      0.000      -0.041      -0.013
+==============================================================================
+Omnibus:                    12894.605   Durbin-Watson:                   0.597
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            44013.029
+Skew:                          -1.174   Prob(JB):                         0.00
+Kurtosis:                       6.708   Cond. No.                     7.48e+15
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 6.87e-27. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
