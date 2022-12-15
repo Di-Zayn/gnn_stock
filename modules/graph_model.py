@@ -37,7 +37,7 @@ class HGTModule(BaseModule):
         node_types = batched_graph.ndata.pop("u_node_type")
 
         # 节点编码 feature_size -> embedding_size
-        # [node_num, embedding_size]
+        # output_shape : (node_num, embedding_size)
         embedded_nodes = self.node_embedding_layer.node_embedding(node_fea, node_types, masks)
 
         # 节点级信息传播
@@ -46,9 +46,9 @@ class HGTModule(BaseModule):
         for i in range(1, self.num_layers):
             hidden_nodes = self.hgat_layer[i](batched_graph, hidden_nodes, node_types, edge_types)
             hidden_nodes = F.relu(self.batch_norm[i](hidden_nodes))
-        batched_graph.ndata["hidden"] = hidden_nodes  # [node_num, hidden_dim * head]
+        batched_graph.ndata["hidden"] = hidden_nodes  #  hidden_nodes_shape: (node_num, hidden_dim * head)
 
-        graph_emb = self.graph_agg(batched_graph, feat="hidden")  # [batch_num, hidden_dim * head]
-        logits = self.output_layer(graph_emb)  # [batch_num, 2]
+        graph_emb = self.graph_agg(batched_graph, feat="hidden")  # output_shape: (batch_num, hidden_dim * head)
+        logits = self.output_layer(graph_emb)  # output_shape: (batch_num, 2)
         # logits = logits.squeeze(-1)
         return logits, self.loss_func(logits, label)

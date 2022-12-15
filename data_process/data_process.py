@@ -87,7 +87,14 @@ def gen_tensor_data(data):
         graph.ndata["mask_idx"] = mask_ids
         graph.ndata["node_type"] = torch.from_numpy(np.array(node_type))
         edge_feature = torch.from_numpy(np.array(edge_feature))
+        if idx == 1:
+            print(edge_feature)
+            print(graph)
         for item in edge_feature:  # 时间慢在这个循环
+            ## graph.edges有多少？如果是无向图的化 正反边是否就没有意义了？
+            ## 根据之前的情况 最后的图确实是每个边都有一个
+            if idx == 1:
+                print(item)
             # 有向图/无向图/边反向？注意！！！
             # 必须是一+维张量，数据类型为float32，否则报错
             # unsqueeze将scale变为[]
@@ -104,11 +111,11 @@ if __name__ == '__main__':
 
     experiment = "label_2"
     horizon = 5
-    for item in ["train", "test", "val", "temp"]:
-        source_data = pickle_load(f"../dataset/processed_data/{item}_data_index_{experiment}_horizon_{horizon}.pkl")
+    for item in ["train", "val"]:
+        source_data = pickle_load(f"../dataset/processed_data/v3_feature/{item}_data_index_{experiment}_horizon_{horizon}_2020.pkl")
         all_data, all_label, all_name = gen_nn_data(source_data)
         all_graph = gen_tensor_data(all_data)
-        pickle_dump(f"../dataset/processed_data/corr_processed_{item}_data_index_{experiment}_horizon_{horizon}.pkl",
+        pickle_dump(f"../dataset/processed_data/v3_feature/corr_processed_{item}_data_index_{experiment}_horizon_{horizon}_2020.pkl",
                     {"graph": all_graph, "label": all_label, "name": all_name})
 
 

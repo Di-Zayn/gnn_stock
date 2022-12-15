@@ -7,30 +7,6 @@ from tqdm import tqdm
 import re
 import inspect
 
-# STATIC_RELATIONS = {
-#     "moneyflow": 0,
-#     "margin_detail": 1,
-#     "pledge_detail": 2,
-#     "hsgt": 3,
-#     "margin": 4
-# }
-# ['daily_basic', 'margin', 'hsgt', 'shibor', 'us_tbr', 'us_tltr', 'us_tycr', 'cn_cpi', 'cn_ppi']
-# STATIC_RELATIONS = {
-#     "daily_basic": 0,
-#     "margin": 1,
-#     "hsgt": 2,
-#     "shibor": 3,
-#     "us_tbr": 4,
-#     "us_tltr": 5,
-#     "us_tycr": 6,
-#     "cn_cpi": 7,
-#     "cn_ppi": 8,
-# }
-# STATIC_RELATIONS = {
-#     "01": 1,
-#     "02": 2,
-#     "12": 1,
-# }
 STATIC_RELATIONS = {
     "01": 1,
     "02": 2,
@@ -43,63 +19,16 @@ STATIC_RELATIONS = {
     "24": 2,
     "34": 1,
 }
-# STATIC_RELATIONS = {
-#     "01": 1,
-#     "02": 2,
-#     "03": 3,
-#     "04": 4,
-#     "05": 5,
-#     "06": 6,
-#     "12": 1,
-#     "13": 2,
-#     "14": 3,
-#     "15": 4,
-#     "16": 5,
-#     "23": 1,
-#     "24": 2,
-#     "25": 3,
-#     "26": 4,
-#     "34": 1,
-#     "35": 2,
-#     "36": 3,
-#     "45": 1,
-#     "46": 2,
-#     "56": 1
-# }
+
 RELATION_NUM = {
-    "MAX": 4 #2 #6  # 不考虑正反向和自环
+    "MAX": 4 # 不考虑正反向和自环 实际训练时(main.py) 若考虑则 relation_num = 2 * RELATION_NUM['MAX'] + 1
 }
 FEATURE_LEN = {
-    "MAX": 21 # 17
+    "MAX": 21 #v3：13 #v2：21 #v1：17
 }
 
-# FEATURE_LEN = {
-#     "MAX": 18,
-#     "center": 10,
-#     "moneyflow": 18,
-#     "margin_detail": 8,
-#     "pledge_detail": 5,
-#     "hsgt": 6,
-#     "margin": 7
-# }
-# FEATURE_LEN = {
-#     "MAX": 30,
-#     "center": 10,
-#     "daily_basic": 10,
-#     "margin": 7,
-#     "hsgt": 6,
-#     "shibor": 8,
-#     "us_tbr": 10,
-#     "us_tltr": 2,
-#     "us_tycr": 12,
-#     "cn_cpi": 12,
-#     "cn_ppi": 30,
-# }
 
-# FEATURE_LEN = {
-#     "name": ["center", "moneyflow", "margin_detail", "pledge_detail", "hsgt", "margin"],
-#     "length": [10, 18, 8, 5, 6, 7]
-# }
+
 
 
 def retrieve_name(var):

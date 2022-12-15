@@ -1,42 +1,5 @@
-import tushare as ts
 import talib as tl
 import pandas as pd
-
-def get_ts_code():
-    df = pd.read_csv("../dataset/index_csv/index_daily.csv", usecols=["ts_code"])
-    df = df.groupby("ts_code")
-    code = df.groups
-    return list(code)
-
-def get_index_daily(token):
-    """
-    实际没使用 因为积分不够
-    """
-    ts.set_token(token)
-    pro = ts.pro_api()
-
-    # 获取交易日信息, 得到21年的开始日和结束日
-    # 是否应该用这个date？
-    trade_cal = pro.trade_cal(exchange='', start_date='20210101', end_date='20211224',
-                              fields='exchange, cal_date,is_open, pretrade_date', is_open='1')
-    start_date, end_date = trade_cal.loc[0]["cal_date"], trade_cal.loc[len(trade_cal) - 1, "cal_date"]
-    print(start_date, end_date)
-
-    # 获取ts_code
-    # ts_code = pro.index_basic(market='SSE', fields="ts_code")
-    # print(ts_code)
-    ts_code = get_ts_code()
-    print(ts_code)
-
-    # 获取全年各股的股票信息 for循环得到index_daily,然而权限不够...
-    data_list = list()
-    for code in ts_code:
-        print(code)
-        df = pro.daily(ts_code=code, start_date=start_date, end_date=end_date)
-        print(df.head())
-        data_list.append(df)
-    index_daily = pd.concat(data_list, ignore_index=True)
-    return index_daily
 
 def cal_custom_index(df, horizon=5, method="max"):
     # 计算 macd 数据
@@ -94,8 +57,7 @@ def cal_custom_index(df, horizon=5, method="max"):
     return df
 
 def get_daily_data(label):
-    data = pd.read_csv("../dataset/index_csv/index_daily.csv")
-    data = data.drop(columns=["label"])
+    data = pd.read_csv("../dataset/history_data.csv")
     data = data.groupby("ts_code")
     custom_index = list()
     if label == "label_1":
@@ -116,16 +78,12 @@ def get_daily_data(label):
     for g in data.groups:
         print(f"正在处理:{g}")
         df = data.get_group(g)
-        # tushare的数据是降序，第一行是最新数据，所以需要先排序
-        # iquant拿到的数据是升序，并且已经添加了自定义特征，所以实际上没走这个函数
         df = df.sort_values(by="trade_date", ignore_index=True)
         df = cal_custom_index(df, horizon, method)
         custom_index.append(df)
     custom_data = pd.concat(custom_index, ignore_index=True)
-    custom_data.to_csv(f"../dataset/index_csv/daily_data_{label}.csv", index=False)
+    custom_data.to_csv(f"../dataset/index_csv/history_data_{label}.csv", index=False)
 
 if __name__ == "__main__":
-    # daily_data.csv里的原label是不同表（hsgt idnex_daily...）聚合方法下的label
-    my_token = "24587244498b9b7854973468a660fb928a04da68fbc38819a3b4eb33"
-    experiment = "label_3"
-    get_daily_data(experiment)
+     experiment = "label_2"
+     get_daily_data(experiment)

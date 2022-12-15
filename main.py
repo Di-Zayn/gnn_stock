@@ -63,18 +63,21 @@ if __name__ == "__main__":
 
     test_dataset = BaseSet(filepath=config.filepath, filename=config.test_filename, label_log=config.label_log)
     test_label = test_dataset.load_data()
-    print(f'Data Load Success, train_data: {len(train_dataset.label)}; test_data:{len(test_dataset.label)}')
-    print("Train:", Counter(train_label), "; Test:", Counter(test_label))
+    print(f'Data Load Success, train_data: {len(train_dataset.label)};'
+          f' test_data:{len(test_dataset.label)}'
+          )
+    print("Train:", Counter(train_label), ";"
+                                          # " Test:", Counter(test_label)
+          )
     train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True,
                               collate_fn=train_dataset.collect_fn_graph, num_workers=4)
-    test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=True,
+    test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,
                              collate_fn=test_dataset.collect_fn_graph, num_workers=4)
 
     if config.only_pos:
         relation_num = RELATION_NUM['MAX'] + 1
     else:
         relation_num = 2 * RELATION_NUM["MAX"] + 1
-    # relation_num = 21
     print(f"relation_num:{relation_num}")
     model = HGTModule(emb_dim=config.emb_dim, hidden_dim=config.hidden_dim,
                       relation_num= relation_num, node_num=1,
@@ -91,11 +94,15 @@ if __name__ == "__main__":
     print(f"初始化时间：{initial_delta // 3600}小时，{(initial_delta % 3600) // 60}分钟，{initial_delta % 60}秒")
     # 初始化结束
 
+    print("参数:")
+    print(f"lr:{config.lr}, weight_decay:{config.weight_decay}, drop_out:{config.dropout}, batch_size:{config.batch_size}")
+    print("模型参数")
+    print(f"embedding:{config.emb_dim} hidden:{config.hidden_dim} head:{config.num_heads} layer：{config.num_gnn_layer}")
+
     best_epoch, best_f1, current_patient = 0, 0, 0
     f1_precession, f1_recall = 0, 0
 
     for epoch in range(config.epoch):
-        # break
         torch.cuda.empty_cache()
         total_loss = 0
         train_logit_p, train_logit_t = list(), list()
@@ -105,6 +112,7 @@ if __name__ == "__main__":
 
         # Dataset中的自定义方法会将多张图整合到一个batch中
         for batch_idx, (b_graph, b_data, _) in enumerate(tqdm(train_loader)):
+            # _对应的是未映射到0/1的原始label 不用
             b_graph = b_graph.to(device)
 
             node_fea, l_label, mask_ids = b_data
@@ -153,23 +161,7 @@ if __name__ == "__main__":
             prf1 = precision_recall_fscore(pred_list=pred_tags, true_list=true_tags)
             print(Counter(pred_tags), Counter(true_tags))
             epoch_f1 = prf1["micro"][-1]
-            """
-            # 逆归一化
-            if config.predict == 'open':
-                min_label, max_label = scale_label[0][0], scale_label[0][1]
-            elif config.predict == 'close':
-                min_label, max_label = scale_label[1][0], scale_label[1][1]
-            elif config.predict == 'start':
-                min_label, max_label = scale_label[2][0], scale_label[2][1]
-            else:
-                raise NotImplementedError
 
-            pred_tags = np.exp(np.array(pred_tags) * np.log(1.0 / (max_label - min_label + 3)))  # 去除log
-            pred_tags_raw = pred_tags * (max_label - min_label + 2) + min_label - 1
-            # true_tags_raw = np.array(true_tags) * (max_label - min_label) + min_label
-            print("=========== 原始数据指标 ===========")
-            epoch_r2, epoch_mae, epoch_mape = regression_metric(pred_list=pred_tags_raw, true_list=raw_tags)
-            """
             if epoch_f1 > best_f1:
                 best_epoch = epoch + 1
                 best_f1 = epoch_f1
@@ -191,77 +183,4 @@ if __name__ == "__main__":
                     print(f"训练时间：{train_delta // 3600}小时，{(train_delta % 3600) // 60}分钟，{train_delta % 60}秒")
                     break
                 current_patient += 1
-            # precision_recall_fscore(pred_list=pred_tags, true_list=true_tags)
     print("Finished.......")
-    """
-    exit(234)
-    print("======   Test  Step   ======")
-    model.load_state_dict(torch.load(model_save_path))
-    model.eval()
-    torch.save(model.cpu(), f"./api-model/{config.exp_path}-{config.predict}-fullmodel-depth4.pkl")
-    # # exit(-1)
-    model = model.to(device)
-    # model.eval()
-    test_true_tags, test_raw_tags, test_pred_tags = list(), list(), list()
-    test_nodes_num = list()
-    with torch.no_grad():
-        for batch_idx, (b_graph, b_data, b_raw_label) in enumerate(tqdm(test_loader)):
-            # b_graph, b_data = b_source
-            b_graph = b_graph.to(device)
-            num_fea, type_fea, type_fea_g, str_fea, str_mask, time_fea, o_label, c_label, s_label, mask_ids = b_data
-            raw_o_label, raw_c_label, raw_s_label = b_raw_label
-            # print(o_label)
-            # print(c_label)
-            # print(raw_o_label)
-            # print(raw_c_label)
-            num_fea = num_fea.to(device)
-            type_fea = type_fea.to(device)
-            type_fea_g = type_fea_g.to(device)
-            str_fea = [str_fea[i].to(device) for i in range(len(str_fea))]
-            str_mask = [str_mask[i].to(device) for i in range(len(str_mask))]
-            time_fea = time_fea.to(device)
-            o_label = o_label.to(device)
-            c_label = c_label.to(device)
-            s_label = s_label.to(device)
-            mask_ids = mask_ids.to(device)
-
-            if config.predict == "open":
-                logits, batch_dev_loss = model.forward(b_graph, num_fea, type_fea_g, str_fea, str_mask, time_fea,
-                                                       mask_ids, o_label)
-                test_true_tags.extend(o_label.detach().cpu().tolist())
-                test_raw_tags.extend(raw_o_label.detach().cpu().tolist())
-                test_nodes_num.extend(b_graph.batch_num_nodes().detach().cpu().tolist())
-            elif config.predict == "close":
-                logits, batch_dev_loss = model.forward(b_graph, num_fea, type_fea_g, str_fea, str_mask, time_fea,
-                                                       mask_ids, c_label)
-                test_true_tags.extend(c_label.detach().cpu().tolist())
-                test_raw_tags.extend(raw_c_label.detach().cpu().tolist())
-                test_nodes_num.extend(b_graph.batch_num_nodes().detach().cpu().tolist())
-            else:
-                logits, batch_dev_loss = model.forward(b_graph, num_fea, type_fea_g, str_fea, str_mask, time_fea,
-                                                       mask_ids, s_label)
-                test_true_tags.extend(s_label.detach().cpu().tolist())
-                test_raw_tags.extend(raw_s_label.detach().cpu().tolist())
-                test_nodes_num.extend(b_graph.batch_num_nodes().detach().cpu().tolist())
-
-            test_pred_tags.extend(logits.detach().cpu().tolist())
-
-    # 逆归一化
-    if config.predict == 'open':
-        min_label, max_label = scale_label[0][0], scale_label[0][1]
-    elif config.predict == 'close':
-        min_label, max_label = scale_label[1][0], scale_label[1][1]
-    elif config.predict == 'start':
-        min_label, max_label = scale_label[2][0], scale_label[2][1]
-    else:
-        raise NotImplementedError
-    test_pred_tags = np.exp(np.array(test_pred_tags) * np.log(1.0 / (max_label - min_label + 3)))  # 去除log
-    test_pred_tags_raw = test_pred_tags * (max_label - min_label + 2) + min_label - 1
-    # pickle_dump(result_save_path, {"raw_true": test_raw_tags, "raw_pred": test_pred_tags_raw,
-    #                                "norm_true": test_true_tags, "norm_pred": test_pred_tags})
-    # pickle_dump(result_save_path2, {"raw_true": test_raw_tags, "raw_pred": test_pred_tags_raw,
-    #                                 "nodes_num": test_nodes_num})
-    # print(len(test_nodes_num), len(test_raw_tags))
-    print("=========== 测试数据指标 ===========")
-    regression_metric(pred_list=test_pred_tags_raw, true_list=test_raw_tags)
-    """

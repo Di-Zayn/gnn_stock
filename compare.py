@@ -1,6 +1,7 @@
 import os
 from collections import Counter
 
+import pandas as pd
 import torch
 from torch import optim
 from torch.utils.data import DataLoader
@@ -15,7 +16,7 @@ from utils.tools import precision_recall_fscore
 
 config = Config()
 
-model_save_path = f"./saved_models/model-{config.ds}-x5_seed{config.seed}.pkl"
+model_save_path = f"./saved_models/v2_feature_tushare/model-{config.ds}-x5_seed{config.seed}.pkl"
 print(model_save_path)
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu_id)
 assert torch.cuda.is_available() is True
@@ -36,8 +37,9 @@ model = HGTModule(emb_dim=config.emb_dim, hidden_dim=config.hidden_dim,
 model.load_state_dict(torch.load(model_save_path))
 model = model.to(device)
 
-for p in ["temp_data_index_label_2_horizon_5"]:
-    test_filename = f"corr_processed_{p}.pkl"
+for p in ["index_label_2_split_train"]:
+    res = []
+    test_filename = f"corr_processed_val_data_{p}.pkl"
     test_dataset = BaseSet(filepath=config.filepath, filename=test_filename, label_log=config.label_log)
     test_label = test_dataset.load_data()
     print(f'Data Load Success test_data:{len(test_dataset.label)}')
@@ -66,8 +68,18 @@ for p in ["temp_data_index_label_2_horizon_5"]:
             pred_tags.extend(torch.argmax(logits, dim=-1).to(torch.int64).detach().cpu().tolist())
             dev_loss += batch_dev_loss
 
+            logit, label = logits.tolist(), l_label.tolist()
+            for i in range(len(label)):
+                if torch.argmax(logits[i]).item() != label[i]:
+                    res.append([logit[i][0], logit[i][1], 0])
+                else:
+                    res.append([logit[i][0], logit[i][1], 1])
+
+
         print(f"dev_loss: {dev_loss / test_dataset.__len__()}")
         print("=========== 归一化后指标 ===========")
         prf1 = precision_recall_fscore(pred_list=pred_tags, true_list=true_tags)
         print(Counter(pred_tags), Counter(true_tags))
+        df = pd.DataFrame(res, columns=["n", "p", "t"])
+        df.to_csv(f"precision_result_{p}.csv", index=False)
         print("=========== 结束 ===========")

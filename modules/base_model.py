@@ -18,6 +18,7 @@ from data_process.data_script import STATIC_RELATIONS, FEATURE_LEN
 
 
 class ApplyNodeFunc(nn.Module):
+    ## 未使用
     """Update the node feature hv with MLP, BN and ReLU."""
 
     def __init__(self, mlp):
@@ -33,6 +34,7 @@ class ApplyNodeFunc(nn.Module):
 
 
 class MLP(nn.Module):
+    ## 未使用
     """MLP with linear output"""
 
     def __init__(self, num_layers, input_dim, hidden_dim, output_dim, bias=True):
@@ -100,8 +102,8 @@ class BaseModule(nn.Module):
         # self.loss_func = nn.BCELoss(reduction='sum')
         config = Config()
         if config.loss_func_type == "label_2":
-            print(f"loss_func_type:{config.loss_func_type}")
-            self.loss_func = nn.CrossEntropyLoss(reduction='sum', weight=torch.from_numpy(np.array([1, 6])).float())
+            print(f"loss_func_type:{config.loss_func_type}, weight:1:5")
+            self.loss_func = nn.CrossEntropyLoss(reduction='sum', weight=torch.from_numpy(np.array([1, 5])).float())
         elif config.loss_func_type == "label_1":
             print(f"loss_func_type:{config.loss_func_type}")
             self.loss_func = nn.CrossEntropyLoss(reduction='sum')
@@ -123,7 +125,6 @@ class NodeEmbeddingLayer(BaseModule):
         # 有多层,每一层处理一种类型的node
         self.feature_embedding_layer = nn.ModuleList(
             [nn.Linear(FEATURE_LEN["MAX"], emb_dim) for _ in range(node_num)])
-        # len(STATIC_RELATIONS) + 1)
 
     def node_embedding(self, node_fea, node_type, masks):
         """
@@ -142,7 +143,7 @@ class NodeEmbeddingLayer(BaseModule):
         return node_emb
 
     def forward(self, graph, node_fea, masks, label):
-        # 这个应该没用过...
+        # 未使用
         print("NodeEmbeddingForward")
         node_types = graph.ndata.pop("u_node_type")
         property_emb = self.node_embedding(node_fea, node_types, masks)
@@ -215,7 +216,7 @@ class GraphAggLayer(nn.Module):
     def forward(self, b_graph, feat: str):
         # 图级聚合
         if self.mode == 'center':  # 1.取中心节点
-            # b_graph.batch_num_nodes() 返回batch里各子图的节点数量, [batch_size]
+            # b_graph.batch_num_nodes()函数返回batch里各子图的节点数量, size = batch_size
             g_node_id = torch.zeros_like(b_graph.batch_num_nodes())
             for i in range(g_node_id.shape[0]):
                 # 第i张图前的节点数
