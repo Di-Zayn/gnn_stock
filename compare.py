@@ -33,7 +33,8 @@ print(f"relation_num:{relation_num}")
 model = HGTModule(emb_dim=config.emb_dim, hidden_dim=config.hidden_dim,
                   relation_num=relation_num, node_num=1,
                   batch_size=config.batch_size, dropout=config.dropout, num_heads=config.num_heads,
-                  num_layers=config.num_gnn_layer, agg_mode=config.agg_mode, pooling_type=config.pooling_type)
+                  num_layers=config.num_gnn_layer, agg_mode=config.agg_mode, pooling_type=config.pooling_type,
+                  loss_weight=1)
 model.load_state_dict(torch.load(model_save_path))
 model = model.to(device)
 

@@ -11,14 +11,14 @@ from modules.base_model import BaseModule, NodeEmbeddingLayer, GraphAggLayer, ST
 
 class HGTModule(BaseModule):
     def __init__(self, emb_dim, hidden_dim, relation_num, node_num=1, batch_size=32, dropout=0.2,
-                 num_heads=1, num_layers=2, agg_mode='graph', pooling_type=None):
-        super(HGTModule, self).__init__(emb_dim, hidden_dim, batch_size, dropout)
+                 num_heads=1, num_layers=2, agg_mode='graph', pooling_type=None, loss_weight=1):
+        super(HGTModule, self).__init__(emb_dim, hidden_dim, batch_size, dropout, loss_weight)
 
         self.num_heads = num_heads
         self.num_layers = num_layers
         self.relation_num = relation_num
         self.node_embedding_layer = NodeEmbeddingLayer(emb_dim=emb_dim, hidden_dim=hidden_dim, node_num=node_num,
-                                                       batch_size=batch_size, dropout=dropout)
+                                                       batch_size=batch_size, dropout=dropout, loss_weight=loss_weight)
 
         self.hgat_layer = nn.ModuleList(
             [HGTConv(emb_dim, hidden_dim, num_heads, node_num, relation_num)])

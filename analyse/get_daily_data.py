@@ -56,6 +56,51 @@ def cal_custom_index(df, horizon=5, method="max"):
     # print(df.head())
     return df
 
+def add_label(df, label):
+    if label == 1:
+        horizon = 1
+        method = "max"
+    elif label == 2:
+        horizon = 3
+        method = "max"
+    elif label == 3:
+        horizon = 5
+        method = "max"
+    elif label == 4:
+        horizon = 7
+        method = "max"
+    elif label == 5:
+        horizon = 5
+        method = "mean"
+    elif label == 6:
+        horizon = 5
+        method = "min"
+    elif label == 7:
+        horizon = 3
+        method = "min"
+    elif label == 8:
+        horizon = 7
+        method = "min"
+
+    history_close = list()
+    for i in range(horizon):
+        hst = df['close'].shift(i)
+        hst.name = f"close{-i}"
+        history_close.append(hst)
+    history_close = pd.concat(history_close, axis=1, ignore_index=True)
+    if method == "max":
+        for i in range(len(history_close)):
+            history_close.loc[i, f"{method}_close"] = history_close.loc[i, :].max()
+    elif method == "mean":
+        for i in range(len(history_close)):
+            history_close.loc[i, f"{method}_close"] = history_close.loc[i, :].mean()
+    elif method == "min":
+        for i in range(len(history_close)):
+            history_close.loc[i, f"{method}_close"] = history_close.loc[i, :].min()
+
+    df[f'label_{label}'] = ((df['close'].shift(-1) - history_close[f"{method}_close"]) / history_close[f"{method}_close"]) * 100
+    df = df.dropna()
+    return df
 def get_daily_data(label):
     data = pd.read_csv("../dataset/history_data.csv")
     data = data.groupby("ts_code")
@@ -64,10 +109,10 @@ def get_daily_data(label):
         horizon = 1
         method = "max"
     elif label == "label_2":
-        horizon = 5
+        horizon = 3
         method = "max"
     elif label == "label_3":
-        horizon = 3
+        horizon = 5
         method = "max"
     elif label == "label_4":
         horizon = 7
@@ -75,6 +120,9 @@ def get_daily_data(label):
     elif label == "label_5":
         horizon = 5
         method = "mean"
+    elif label == "label_6":
+        horizon = 5
+        method = "min"
     for g in data.groups:
         print(f"正在处理:{g}")
         df = data.get_group(g)
@@ -82,8 +130,22 @@ def get_daily_data(label):
         df = cal_custom_index(df, horizon, method)
         custom_index.append(df)
     custom_data = pd.concat(custom_index, ignore_index=True)
-    custom_data.to_csv(f"../dataset/index_csv/history_data_{label}.csv", index=False)
+    custom_data = custom_data[custom_data['trade_date'] >= 20210101]
+    custom_data = custom_data[custom_data['trade_date'] < 20220101]
+    custom_data.to_csv(f"../dataset/experiment/experiment_data.csv", index=False)
 
 if __name__ == "__main__":
-     experiment = "label_2"
-     get_daily_data(experiment)
+    data = pd.read_csv("../dataset/history_data.csv")
+    data = data[data['trade_date'] >= 20201201]
+    data = data[data['trade_date'] < 20220101]
+    data = data.groupby("ts_code")
+    custom_index = list()
+    for g in data.groups:
+        print(f"正在处理:{g}")
+        df_group = data.get_group(g)
+        df_group = df_group.sort_values(by="trade_date", ignore_index=True)
+        for i in range(7, 9):
+            df_group = add_label(df_group, i)
+        custom_index.append(df_group)
+    custom_data = pd.concat(custom_index, ignore_index=True)
+    custom_data.to_csv(f"../dataset/processed_data/experiment/experiment_data_label7-8.csv", index=False)

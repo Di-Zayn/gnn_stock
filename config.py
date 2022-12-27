@@ -2,11 +2,12 @@
 class Config(object):
     def __init__(self):
         # 数据集相关配置
-        self.filepath = f"./dataset/processed_data/v2_feature"
-        self.ds = "index_label_2_horizon_5_2020"
+        self.filepath = f"./dataset/processed_data/experiment/processed_data"
+        self.ds = "index_label_8_horizon_5"
+        self.save_model = "experiment"
         self.fea_count = 4  # 采用几种属性
-        self.train_filename = f"corr_processed_val_data_{self.ds}.pkl"
-        self.test_filename = f"corr_processed_val_data_{self.ds}.pkl"
+        self.train_filename = f"corr_processed_set1_data_{self.ds}.pkl"
+        self.test_filename = f"corr_processed_set2_data_{self.ds}.pkl"
         self.label_log = True  # 标签是否需要取log
         # 模型超参数相关
         self.emb_dim = 100 #原始100
@@ -18,13 +19,14 @@ class Config(object):
         self.pooling_type = "sum"  # ['sum', 'avg'/'mean', 'sort', 'weight', 'gap', 's2s', 'std', 'ste']
         self.experiment = f'hgt-{self.use_property_type}'
         self.only_pos = False # 注意
-        self.loss_func_type = "label_2" # 注意
         # 训练超参数相关配置
-        self.seed = 300
-        self.gpu_id = 0
-        self.epoch = 30 # 500
-        self.patient = 50
+        self.seed = 619
+        self.gpu_id = 1
+        self.epoch = 12 # 500
+        self.patient = 15
         self.batch_size = 512#128 # 256
-        self.dropout = 0.4 #0.1
-        self.lr = 1e-4 #1e-2  # 1e-3, 2e-4
-        self.weight_decay = 0.03#0.9#0.001
+        self.dropout = 0 #0.1
+        self.lr = 1e-3 #1e-2  # 1e-3, 2e-4
+        self.weight_decay = 0#0.9#0.001
+
+

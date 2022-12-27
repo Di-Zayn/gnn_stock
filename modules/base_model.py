@@ -14,7 +14,7 @@ import sys
 from config import Config
 
 sys.path.append("../")
-from data_process.data_script import STATIC_RELATIONS, FEATURE_LEN
+from data_process.data_script import FEATURE_LEN
 
 
 class ApplyNodeFunc(nn.Module):
@@ -89,7 +89,7 @@ class MLP(nn.Module):
 
 
 class BaseModule(nn.Module):
-    def __init__(self, emb_dim, hidden_dim, batch_size=32, dropout=0.2):
+    def __init__(self, emb_dim, hidden_dim, batch_size=32, dropout=0.2, loss_weight=1):
         super(BaseModule, self).__init__()
         self.embedding_dim = emb_dim
         self.hidden_dim = hidden_dim
@@ -100,16 +100,7 @@ class BaseModule(nn.Module):
         self.output_layer = nn.Sequential(nn.Linear(hidden_dim, 2), nn.Softmax(dim=-1))
         # self.loss_func = nn.MSELoss(reduction='sum')
         # self.loss_func = nn.BCELoss(reduction='sum')
-        config = Config()
-        if config.loss_func_type == "label_2":
-            print(f"loss_func_type:{config.loss_func_type}, weight:1:5")
-            self.loss_func = nn.CrossEntropyLoss(reduction='sum', weight=torch.from_numpy(np.array([1, 5])).float())
-        elif config.loss_func_type == "label_1":
-            print(f"loss_func_type:{config.loss_func_type}")
-            self.loss_func = nn.CrossEntropyLoss(reduction='sum')
-        elif config.loss_func_type == "label_3":
-            print(f"loss_func_type:{config.loss_func_type}")
-            self.loss_func = nn.CrossEntropyLoss(reduction='sum', weight=torch.from_numpy(np.array([1, 2])).float())
+        self.loss_func = nn.CrossEntropyLoss(reduction='sum', weight=torch.from_numpy(np.array([1, loss_weight])).float())
 
     def calc_loss(self, logits, true_prob):
         return self.loss_func(logits, true_prob)
@@ -119,8 +110,8 @@ class BaseModule(nn.Module):
 
 
 class NodeEmbeddingLayer(BaseModule):
-    def __init__(self, emb_dim, hidden_dim, node_num, batch_size=32, dropout=0.2):
-        super(NodeEmbeddingLayer, self).__init__(emb_dim, hidden_dim, batch_size, dropout)
+    def __init__(self, emb_dim, hidden_dim, node_num, batch_size=32, dropout=0.2, loss_weight=1):
+        super(NodeEmbeddingLayer, self).__init__(emb_dim, hidden_dim, batch_size, dropout, loss_weight)
 
         # 有多层,每一层处理一种类型的node
         self.feature_embedding_layer = nn.ModuleList(
